@@ -1,0 +1,288 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="VaultModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Computer">
+          <Key>
+            <PropertyRef Name="computerid" />
+          </Key>
+          <Property Name="departmentname" Type="varchar" MaxLength="50" />
+          <Property Name="computerid" Type="int" Nullable="false" />
+          <Property Name="computername" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Credential">
+          <Key>
+            <PropertyRef Name="username" />
+            <PropertyRef Name="password" />
+            <PropertyRef Name="type" />
+          </Key>
+          <Property Name="computerid" Type="int" Nullable="false" />
+          <Property Name="username" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="password" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="type" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Department">
+          <Key>
+            <PropertyRef Name="departmentname" />
+          </Key>
+          <Property Name="departmentname" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Permission">
+          <Key>
+            <PropertyRef Name="username" />
+            <PropertyRef Name="departmentname" />
+          </Key>
+          <Property Name="username" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="departmentname" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Vault_User">
+          <Key>
+            <PropertyRef Name="username" />
+          </Key>
+          <Property Name="username" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="firstname" Type="varchar" MaxLength="30" />
+          <Property Name="lastname" Type="varchar" MaxLength="30" />
+          <Property Name="hash" Type="varchar" MaxLength="500" />
+          <Property Name="isadmin" Type="bit" />
+        </EntityType>
+        <Association Name="FK__Computer__depart__0CBAE877">
+          <End Role="Department" Type="Self.Department" Multiplicity="0..1" />
+          <End Role="Computer" Type="Self.Computer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Department">
+              <PropertyRef Name="departmentname" />
+            </Principal>
+            <Dependent Role="Computer">
+              <PropertyRef Name="departmentname" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Credentia__compu__0F975522">
+          <End Role="Computer" Type="Self.Computer" Multiplicity="1" />
+          <End Role="Credential" Type="Self.Credential" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Computer">
+              <PropertyRef Name="computerid" />
+            </Principal>
+            <Dependent Role="Credential">
+              <PropertyRef Name="computerid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Permissio__depar__07F6335A">
+          <End Role="Department" Type="Self.Department" Multiplicity="1" />
+          <End Role="Permission" Type="Self.Permission" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Department">
+              <PropertyRef Name="departmentname" />
+            </Principal>
+            <Dependent Role="Permission">
+              <PropertyRef Name="departmentname" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Permissio__usern__07020F21">
+          <End Role="Vault_User" Type="Self.Vault_User" Multiplicity="1" />
+          <End Role="Permission" Type="Self.Permission" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Vault_User">
+              <PropertyRef Name="username" />
+            </Principal>
+            <Dependent Role="Permission">
+              <PropertyRef Name="username" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="VaultModelStoreContainer">
+          <EntitySet Name="Computer" EntityType="Self.Computer" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Credential" EntityType="Self.Credential" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Department" EntityType="Self.Department" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Permission" EntityType="Self.Permission" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Vault_User" EntityType="Self.Vault_User" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__Computer__depart__0CBAE877" Association="Self.FK__Computer__depart__0CBAE877">
+            <End Role="Department" EntitySet="Department" />
+            <End Role="Computer" EntitySet="Computer" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Credentia__compu__0F975522" Association="Self.FK__Credentia__compu__0F975522">
+            <End Role="Computer" EntitySet="Computer" />
+            <End Role="Credential" EntitySet="Credential" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Permissio__depar__07F6335A" Association="Self.FK__Permissio__depar__07F6335A">
+            <End Role="Department" EntitySet="Department" />
+            <End Role="Permission" EntitySet="Permission" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Permissio__usern__07020F21" Association="Self.FK__Permissio__usern__07020F21">
+            <End Role="Vault_User" EntitySet="Vault_User" />
+            <End Role="Permission" EntitySet="Permission" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="VaultModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Computer">
+          <Key>
+            <PropertyRef Name="computerid" />
+          </Key>
+          <Property Name="departmentname" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="computerid" Type="Int32" Nullable="false" />
+          <Property Name="computername" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Department" Relationship="Self.FK__Computer__depart__0CBAE877" FromRole="Computer" ToRole="Department" />
+          <NavigationProperty Name="Credentials" Relationship="Self.FK__Credentia__compu__0F975522" FromRole="Computer" ToRole="Credential" />
+        </EntityType>
+        <EntityType Name="Credential">
+          <Key>
+            <PropertyRef Name="username" />
+            <PropertyRef Name="password" />
+            <PropertyRef Name="type" />
+          </Key>
+          <Property Name="computerid" Type="Int32" Nullable="false" />
+          <Property Name="username" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="type" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Computer" Relationship="Self.FK__Credentia__compu__0F975522" FromRole="Credential" ToRole="Computer" />
+        </EntityType>
+        <EntityType Name="Department">
+          <Key>
+            <PropertyRef Name="departmentname" />
+          </Key>
+          <Property Name="departmentname" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Computers" Relationship="Self.FK__Computer__depart__0CBAE877" FromRole="Department" ToRole="Computer" />
+          <NavigationProperty Name="Vault_User" Relationship="Self.Permission" FromRole="Department" ToRole="Vault_User" />
+        </EntityType>
+        <EntityType Name="Vault_User">
+          <Key>
+            <PropertyRef Name="username" />
+          </Key>
+          <Property Name="username" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="firstname" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="lastname" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="hash" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="isadmin" Type="Boolean" />
+          <NavigationProperty Name="Departments" Relationship="Self.Permission" FromRole="Vault_User" ToRole="Department" />
+        </EntityType>
+        <Association Name="FK__Computer__depart__0CBAE877">
+          <End Role="Department" Type="Self.Department" Multiplicity="0..1" />
+          <End Role="Computer" Type="Self.Computer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Department">
+              <PropertyRef Name="departmentname" />
+            </Principal>
+            <Dependent Role="Computer">
+              <PropertyRef Name="departmentname" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Credentia__compu__0F975522">
+          <End Role="Computer" Type="Self.Computer" Multiplicity="1" />
+          <End Role="Credential" Type="Self.Credential" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Computer">
+              <PropertyRef Name="computerid" />
+            </Principal>
+            <Dependent Role="Credential">
+              <PropertyRef Name="computerid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Permission">
+          <End Role="Department" Type="Self.Department" Multiplicity="*" />
+          <End Role="Vault_User" Type="Self.Vault_User" Multiplicity="*" />
+        </Association>
+        <EntityContainer Name="VaultEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Computers" EntityType="Self.Computer" />
+          <EntitySet Name="Credentials" EntityType="Self.Credential" />
+          <EntitySet Name="Departments" EntityType="Self.Department" />
+          <EntitySet Name="Vault_User" EntityType="Self.Vault_User" />
+          <AssociationSet Name="FK__Computer__depart__0CBAE877" Association="Self.FK__Computer__depart__0CBAE877">
+            <End Role="Department" EntitySet="Departments" />
+            <End Role="Computer" EntitySet="Computers" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Credentia__compu__0F975522" Association="Self.FK__Credentia__compu__0F975522">
+            <End Role="Computer" EntitySet="Computers" />
+            <End Role="Credential" EntitySet="Credentials" />
+          </AssociationSet>
+          <AssociationSet Name="Permission" Association="Self.Permission">
+            <End Role="Department" EntitySet="Departments" />
+            <End Role="Vault_User" EntitySet="Vault_User" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="VaultModelStoreContainer" CdmEntityContainer="VaultEntities">
+          <EntitySetMapping Name="Computers">
+            <EntityTypeMapping TypeName="VaultModel.Computer">
+              <MappingFragment StoreEntitySet="Computer">
+                <ScalarProperty Name="departmentname" ColumnName="departmentname" />
+                <ScalarProperty Name="computerid" ColumnName="computerid" />
+                <ScalarProperty Name="computername" ColumnName="computername" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Credentials">
+            <EntityTypeMapping TypeName="VaultModel.Credential">
+              <MappingFragment StoreEntitySet="Credential">
+                <ScalarProperty Name="computerid" ColumnName="computerid" />
+                <ScalarProperty Name="username" ColumnName="username" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="type" ColumnName="type" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Departments">
+            <EntityTypeMapping TypeName="VaultModel.Department">
+              <MappingFragment StoreEntitySet="Department">
+                <ScalarProperty Name="departmentname" ColumnName="departmentname" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Vault_User">
+            <EntityTypeMapping TypeName="VaultModel.Vault_User">
+              <MappingFragment StoreEntitySet="Vault_User">
+                <ScalarProperty Name="username" ColumnName="username" />
+                <ScalarProperty Name="firstname" ColumnName="firstname" />
+                <ScalarProperty Name="lastname" ColumnName="lastname" />
+                <ScalarProperty Name="hash" ColumnName="hash" />
+                <ScalarProperty Name="isadmin" ColumnName="isadmin" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="Permission" TypeName="VaultModel.Permission" StoreEntitySet="Permission">
+            <EndProperty Name="Department">
+              <ScalarProperty Name="departmentname" ColumnName="departmentname" />
+            </EndProperty>
+            <EndProperty Name="Vault_User">
+              <ScalarProperty Name="username" ColumnName="username" />
+            </EndProperty>
+          </AssociationSetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
