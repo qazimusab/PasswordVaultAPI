@@ -12,6 +12,7 @@ using RestAPI;
 
 namespace RestAPI.Controllers
 {
+    [Authorize]
     public class CredentialsController : ApiController
     {
         private VaultEntities db = new VaultEntities();
